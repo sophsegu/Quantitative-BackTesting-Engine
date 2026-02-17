@@ -1,12 +1,21 @@
 from data.yahoo_loader import YahooFinanceLoader
 from signals.momentum import MomentumSignal
+from portfolio.portfolio import Portfolio
 
-# Load data
+# 1. Load data
 loader = YahooFinanceLoader()
-df_aapl = loader.load_ticker("AAPL")
+tickers = ["AAPL", "MSFT", "SPY"]
+data = {t: loader.load_ticker(t) for t in tickers}
 
-# Create momentum signal
+# 2. Generate signals
 momentum = MomentumSignal(lookback=50)
-signal_df = momentum.generate_signal(df_aapl)
+signals = {t: momentum.generate_signal(df) for t, df in data.items()}
 
-print(signal_df.tail(10))
+# 3. Backtest
+portfolio = Portfolio(initial_capital=100000)
+backtest_results = portfolio.backtest_multiple(signals)
+
+# 4. Inspect
+for ticker, df in backtest_results.items():
+    print(f"\n{ticker} Backtest:")
+    print(df.tail(10))
