@@ -1,12 +1,8 @@
-title: "Quantitative Backtesting Engine"
+# Quantitative Backtesting Engine
 
-badges:
-  - name: "Python Version"
-    image: "https://img.shields.io/badge/python-3.10+-blue.svg"
-  - name: "License"
-    image: "https://img.shields.io/badge/license-MIT-green.svg"
-  - name: "Build Status"
-    image: "https://img.shields.io/github/workflow/status/yourusername/Quantitative-Backtesting-Engine/Python%20package"
+![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Build](https://img.shields.io/github/workflow/status/yourusername/Quantitative-Backtesting-Engine/Python%20package)
 
 overview: |
   ## Overview
