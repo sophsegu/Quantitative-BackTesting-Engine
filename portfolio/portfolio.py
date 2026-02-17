@@ -50,3 +50,30 @@ class Portfolio:
         for ticker, df in signals_dict.items():
             returns_dict[ticker] = self.backtest_signal(df)
         return returns_dict
+
+    def build_weighted_portfolio(self, backtests, weights, initial_capital=None):
+        if initial_capital is None:
+            initial_capital = self.initial_capital
+
+        portfolio_df = pd.DataFrame()
+
+        for ticker, df in backtests.items():
+            temp = df[["Date", "Daily_Return"]].copy()  # <-- use Daily_Return
+            temp = temp.rename(columns={"Daily_Return": ticker})
+
+            if portfolio_df.empty:
+                portfolio_df = temp
+            else:
+                portfolio_df = pd.merge(portfolio_df, temp, on="Date", how="outer")
+
+        portfolio_df = portfolio_df.fillna(0)
+
+        portfolio_df["Portfolio_Return"] = 0
+
+        for ticker, weight in weights.items():
+            portfolio_df["Portfolio_Return"] += portfolio_df[ticker] * weight
+
+        portfolio_df["Cumulative_Return"] = (1 + portfolio_df["Portfolio_Return"]).cumprod()
+        portfolio_df["Portfolio_Value"] = initial_capital * portfolio_df["Cumulative_Return"]
+
+        return portfolio_df

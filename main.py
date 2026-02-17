@@ -1,6 +1,7 @@
 from data.yahoo_loader import YahooFinanceLoader
 from signals.momentum import MomentumSignal
 from portfolio.portfolio import Portfolio
+from metrics.metrics import calculate_metrics
 
 # 1. Load data
 loader = YahooFinanceLoader()
@@ -19,3 +20,18 @@ backtest_results = portfolio.backtest_multiple(signals)
 for ticker, df in backtest_results.items():
     print(f"\n{ticker} Backtest:")
     print(df.tail(10))
+
+portfolio_obj = Portfolio(initial_capital=100000)
+backtest_results = portfolio_obj.backtest_multiple(signals)
+
+weights = {
+    "AAPL": 0.25,
+    "MSFT": 0.25,
+    "SPY": 0.50
+}
+
+portfolio_df = portfolio_obj.build_weighted_portfolio(backtest_results, weights)
+
+metrics = calculate_metrics(portfolio_df)
+
+print(metrics)
