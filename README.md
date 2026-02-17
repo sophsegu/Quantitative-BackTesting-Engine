@@ -1,66 +1,118 @@
-# Quantitative Backtesting Engine
+title: "Quantitative Backtesting Engine"
 
-[![Python Version](https://img.shields.io/badge/python-3.13-blue)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+badges:
+  - name: "Python Version"
+    image: "https://img.shields.io/badge/python-3.10+-blue.svg"
+  - name: "License"
+    image: "https://img.shields.io/badge/license-MIT-green.svg"
+  - name: "Build Status"
+    image: "https://img.shields.io/github/workflow/status/yourusername/Quantitative-Backtesting-Engine/Python%20package"
 
-## Overview
+overview: |
+  ## Overview
+  The Quantitative Backtesting Engine is a Python framework designed for financial researchers, algorithmic traders, and quantitative analysts to:
 
-The **Quantitative Backtesting Engine** is a Python framework designed for financial researchers, algorithmic traders, and quantitative analysts to:
+  - Download historical market data.
+  - Generate trading signals using custom strategies.
+  - Backtest single or multi-asset portfolios.
+  - Evaluate portfolio performance with standard financial metrics.
 
-- Download historical market data.
-- Generate trading signals using custom strategies.
-- Backtest single or multi-asset portfolios.
-- Evaluate portfolio performance with standard financial metrics.
+  The engine supports multi-ticker portfolios with **custom weighting** and modular components for signals, portfolios, and metrics.
 
-The engine supports **multi-ticker portfolios** with **custom weighting** and modular components for signals, portfolios, and metrics.  
+features: |
+  ## Features
+  - Download historical stock and ETF data from Yahoo Finance.
+  - Momentum-based signal generation (with configurable lookback).
+  - Backtesting engine with positions, daily returns, and cumulative returns.
+  - Weighted multi-ticker portfolios.
+  - Portfolio performance metrics:
+      - Cumulative Return
+      - Annualized Return
+      - Volatility
+      - Sharpe Ratio
+      - Maximum Drawdown
+  - Extensible to custom signals and new metrics.
+  - Output in Pandas DataFrames for easy visualization and analysis.
 
----
+project_structure: |
+  ## Project Structure
+  Quantitative-BackTesting-Engine/
+  ├── data/
+  │   └── yahoo_loader.py        # Yahoo Finance data loader
+  ├── signals/
+  │   └── momentum.py            # Example momentum signal generator
+  ├── portfolio/
+  │   └── portfolio.py           # Portfolio engine and backtesting
+  ├── metrics/
+  │   └── metrics.py             # Performance metrics
+  ├── main.py                    # Example usage script
+  ├── requirements.txt           # Python dependencies
+  └── README.md                  # Project overview
 
-## Features
+installation: |
+  ## Installation
+  1. Clone the repository:
+  ```bash
+  git clone https://github.com/yourusername/Quantitative-BackTesting-Engine.git
+  cd Quantitative-BackTesting-Engine
+  ```
+  2. Create a virtual environment and install dependencies:
+  ```bash
+  python -m venv venv
+  # Linux/macOS:
+  source venv/bin/activate
+  # Windows:
+  venv\Scripts\activate
+  pip install -r requirements.txt
+  ```
 
-- Download historical stock and ETF data from Yahoo Finance.
-- Momentum-based signal generation (with configurable lookback).
-- Backtesting engine with positions, daily returns, and cumulative returns.
-- Weighted multi-ticker portfolios.
-- Portfolio performance metrics:
-  - Cumulative Return
-  - Annualized Return
-  - Volatility
-  - Sharpe Ratio
-  - Maximum Drawdown
-- Extensible to custom signals and new metrics.
-- Output in Pandas DataFrames for easy visualization and analysis.
+usage: |
+   ## Usage
+   ```bash
+    from data.yahoo_loader import YahooFinanceLoader
+    from signals.momentum import MomentumSignal
+    from portfolio.portfolio import Portfolio
+    from metrics.metrics import calculate_metrics
 
----
+    # 1. Load data
+    loader = YahooFinanceLoader()
+    tickers = ["AAPL", "MSFT", "SPY"]
+    data = {t: loader.load_ticker(t) for t in tickers}
 
-## Project Structure
-Quantitative-BackTesting-Engine/
-├── data/
-│ └── yahoo_loader.py # Yahoo Finance data loader
-├── signals/
-│ └── momentum.py # Example momentum signal generator
-├── portfolio/
-│ └── portfolio.py # Portfolio engine and backtesting
-├── metrics/
-│ └── metrics.py # Performance metrics
-├── main.py # Example usage script
-├── requirements.txt # Python dependencies
-└── README.md # Project overview
+    # 2. Generate signals
+    momentum = MomentumSignal(lookback=50)
+    signals = {t: momentum.generate_signal(df) for t, df in data.items()}
 
+    # 3. Backtest
+    portfolio = Portfolio(initial_capital=100000)
+    backtest_results = portfolio.backtest_multiple(signals)
 
----
+    # 4. Inspect
+    for ticker, df in backtest_results.items():
+    print(f"\\n{ticker} Backtest:")
+    print(df.tail(10))
 
-## Installation
+    # 5. Build custom weighted portfolio
+    weights = {
+        "AAPL": 0.25,
+        "MSFT": 0.25,
+        "SPY": 0.50
+    }
+    portfolio_df = portfolio.build_weighted_portfolio(backtest_results, weights)
 
-1. Clone the repository:
+    # 6. Calculate metrics
+    metrics = calculate_metrics(portfolio_df)
+    print(metrics)
+  ```
 
-```bash
-git clone https://github.com/yourusername/Quantitative-BackTesting-Engine.git
-cd Quantitative-BackTesting-Engine
+license: |
+  ## License
+  This project is licensed under the MIT License.
 
-2. Create a virtual environment and install dependencies:
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-
+notes: |
+  ## Notes
+  - The engine is fully modular: you can add new signal generators, portfolios, or metrics easily.
+  - All outputs are Pandas DataFrames for easy plotting, visualization, and further analysis.
+  - Designed for Python 3.10+.
+  - Supports multi-ticker portfolios with customizable weights.
+  - Commission is applied in backtesting at 0.1% per trade (modifiable in the Portfolio class).
