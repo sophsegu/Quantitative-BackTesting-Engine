@@ -34,4 +34,33 @@ The engine supports **multi-ticker portfolios** with **custom weighting** and mo
 ---
 
 ## Project Structure
+Quantitative-BackTesting-Engine/
+├── data/
+│ └── yahoo_loader.py # Yahoo Finance data loader
+├── signals/
+│ └── momentum.py # Example momentum signal generator
+├── portfolio/
+│ └── portfolio.py # Portfolio engine and backtesting
+├── metrics/
+│ └── metrics.py # Performance metrics
+├── main.py # Example usage script
+├── requirements.txt # Python dependencies
+└── README.md # Project overview
+
+
+---
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/Quantitative-BackTesting-Engine.git
+cd Quantitative-BackTesting-Engine
+
+2. Create a virtual environment and install dependencies:
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
 
